@@ -19,7 +19,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import EventBus from "../eventBus";
 import router from "../router";
 
 const INIT = "";
@@ -51,13 +50,6 @@ export default defineComponent({
       // swith to book view
       router.push("/");
     }
-  },
-  created() {
-    EventBus.$on("craate-new", () => (this.state = "Add"));
-    EventBus.$on("update-one", (book: any) => {
-      this.state = "Update";
-      this.book = book;
-    });
   }
 });
 </script>

@@ -28,7 +28,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapGetters, mapActions } from "vuex";
-import EventBus from "../eventBus";
 import router from "../router";
 
 export default defineComponent({
@@ -36,11 +35,9 @@ export default defineComponent({
   methods: {
     ...mapActions(["obtainAll", "deleteAll", "deleteOne"]),
     createNew() {
-      EventBus.$emit("create-new");
       router.push("book");
     },
     updateOne(book: any) {
-      EventBus.$emit("update-one", book);
       router.push("/book");
     }
   },

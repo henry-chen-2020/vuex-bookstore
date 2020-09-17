@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import books from './modules/books'
+import books from "./modules/books";
 
 export default createStore({
   state: {},
