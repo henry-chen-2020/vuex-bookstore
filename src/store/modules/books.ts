@@ -4,21 +4,21 @@ import { v4 as uuid } from "uuid";
 
 const BOOKS = [
   {
-    ID: 1,
+    ID: "1",
     Name: "Wow Factor",
     Author: "Ada",
     ISBN: "34572075",
     Genre: "fantasy"
   },
   {
-    ID: 2,
+    ID: "2",
     Name: "New Yorker",
     Author: "famous",
     ISBN: "unkonwn",
     Genre: "fiction"
   },
   {
-    ID: 3,
+    ID: "3",
     Name: "The Sky",
     Author: "Anonymous",
     ISBN: "123456789",
@@ -53,7 +53,8 @@ const state = {
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const getters = {
-  allBooks: state => state.books
+  allBooks: state => state.books,
+  theBook: state => id => state.books.find(book => book.ID === id)
 };
 /**
  * createNew
@@ -73,11 +74,11 @@ const actions = {
     ctx.commit("SET_BOOKS", BOOKS);
   },
   async createNew(ctx, book) {
-    console.log("create new");
     book.ID = uuid();
-    state.books.unshift(book);
+    console.log("create new", book);
     // const response = await axios.post(`${REST}/books`, book);
     // ctx.commit("ADD_BOOK", response.data);
+    ctx.commit("ADD_BOOK", book);
   },
   async deleteAll(ctx) {
     console.log("delete all");
@@ -104,7 +105,7 @@ const mutations = {
   DEL_BOOK: (state, id) =>
     (state.books = state.boook.filter(book => book.ID != id)),
   PUT_BOOK: (state, book) => {
-    const index = state.books.findIndex(book);
+    const index = state.books.findIndex(aBook => aBook.ID === book.ID);
     if (index !== -1) {
       state.books.splice(index, 1, book);
     }

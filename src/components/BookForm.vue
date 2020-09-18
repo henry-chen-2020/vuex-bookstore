@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h2>{{ state }} a Book</h2>
+    <h2>{{ act }} a Book</h2>
     <form>
       <fieldset>
-        <legend>{{ state }} a Book</legend>
-        <div class="field" v-for="(item, key, i) in book" :key="key">
+        <legend>{{ act }} a Book</legend>
+        <div class="field" v-for="(item, key) in book" :key="key">
           <label class="label" for="{{ key }}">{{ key }}:</label>
-          <input type="text" v-model="book[i]" required="" />
+          <input type="text" v-model="item.value" required="" />
         </div>
         <div>
           <button @click="submit" type="submit">Save</button>
@@ -20,35 +20,56 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import router from "../router";
+import { mapGetters, mapActions } from "vuex";
 
-const INIT = "";
-// () => {
-//   return {
-//     value: "",
-//     error: false
-//   };
-// };
+const INIT = () => {
+  return {
+    value: ""
+  };
+};
 
 export default defineComponent({
+  props: ["act", "id"],
   data() {
     return {
-      state: "Add",
       book: {
-        Name: INIT,
-        Author: INIT,
-        ISBN: INIT,
-        Genre: INIT
+        Name: INIT(),
+        Author: INIT(),
+        ISBN: INIT(),
+        Genre: INIT()
       }
     };
   },
   methods: {
+    ...mapActions(["createNew", "updateOne"]),
     submit() {
-      this.book.Name;
+      console.log("#form: sumbit", this.act);
+      const book = {};
+      const keys = Object.keys(this.book);
+      keys.forEach(key => (book[key] = this.book[key].value));
+      if (this.act === "add") {
+        this.createNew(book);
+      } else {
+        book["ID"] = this.id;
+        this.updateOne(book);
+      }
       router.push("/");
     },
     cancel() {
-      // swith to book view
+      console.log("#form: cancel");
       router.push("/");
+    }
+  },
+  computed: mapGetters(["theBook"]),
+  created() {
+    if (this.act === "update") {
+      const theBook = this.theBook(this.id);
+      if (theBook) {
+        this.book.Name.value = theBook.Name;
+        this.book.Author.value = theBook.Author;
+        this.book.ISBN.value = theBook.ISBN;
+        this.book.Genre.value = theBook.Genre;
+      }
     }
   }
 });

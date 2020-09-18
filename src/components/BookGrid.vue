@@ -17,8 +17,8 @@
         <h5><i>by</i>{{ book.Author }}</h5>
         <div class="isbn">{{ book.ISBN }}</div>
         <div class="book-actions">
-          <i class="material-icons" @click="updateOne(book)">edit</i>
-          <i class="material-icons" @click="deleteOne(book)">close</i>
+          <i class="material-icons" @click="updateOne(book.ID)">edit</i>
+          <i class="material-icons" @click="deleteOne(book.ID)">close</i>
         </div>
       </div>
     </div>
@@ -35,10 +35,10 @@ export default defineComponent({
   methods: {
     ...mapActions(["obtainAll", "deleteAll", "deleteOne"]),
     createNew() {
-      router.push("book");
+      router.push("/book/add/0");
     },
-    updateOne(book: any) {
-      router.push("/book");
+    updateOne(ID: string) {
+      router.push(`/book/update/${ID}`);
     }
   },
   computed: mapGetters(["allBooks"]),

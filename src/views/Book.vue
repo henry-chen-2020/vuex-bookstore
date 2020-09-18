@@ -1,6 +1,6 @@
 <template>
   <div class="book">
-    <BookForm />
+    <BookForm :act="act" :id="id" />
   </div>
 </template>
 
@@ -11,6 +11,7 @@ import BookForm from "../components/BookForm.vue";
 export default defineComponent({
   components: {
     BookForm
-  }
+  },
+  props: ["act", "id"]
 });
 </script>
