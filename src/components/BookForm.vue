@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2>{{ act }} a Book</h2>
+    <h2>{{ capitalize(act) }} a Book</h2>
     <form>
       <fieldset>
-        <legend>{{ act }} a Book</legend>
+        <legend>{{ capitalize(act) }} a Book</legend>
         <div class="field" v-for="(item, key) in book" :key="key">
           <label class="label" for="{{ key }}">{{ key }}:</label>
           <input type="text" v-model="item.value" required="" />
@@ -42,6 +42,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(["createNew", "updateOne"]),
+    capitalize: str => str.charAt(0).toUpperCase() + str.slice(1),
     submit() {
       console.log("#form: sumbit", this.act);
       const book = {};

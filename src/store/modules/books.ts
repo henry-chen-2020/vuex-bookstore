@@ -1,5 +1,5 @@
-// import axios from "axios";
-// const REST = "http://127.0.0.1:53025";
+import axios from "axios";
+const REST = "http://127.0.0.1:51364";
 import { v4 as uuid } from "uuid";
 
 const BOOKS = [
@@ -67,33 +67,41 @@ const getters = {
  */
 
 const actions = {
-  async obtainAll(ctx) {
-    console.log("obtain all");
-    // const response = await axios.get(`${REST}/books`);
-    // ctx.commit("SET_BOOKS", response.data);
-    ctx.commit("SET_BOOKS", BOOKS);
+  async obtainAll({ commit }) {
+    console.log("#book: obtain all");
+    try {
+      const response = await axios.get(`${REST}/books`);
+      commit("SET_BOOKS", response.data);
+    } catch {
+      commit("SET_BOOKS", BOOKS);
+  }
   },
   async createNew(ctx, book) {
     book.ID = uuid();
-    console.log("create new", book);
-    // const response = await axios.post(`${REST}/books`, book);
-    // ctx.commit("ADD_BOOK", response.data);
-    ctx.commit("ADD_BOOK", book);
+    console.log("#book: create new", book);
+    try {
+      const response = await axios.post(`${REST}/books`, book);
+      ctx.commit("ADD_BOOK", response.data);
+    } catch (e) {
+      ctx.commit("ADD_BOOK", book);
+    }
   },
   async deleteAll(ctx) {
-    console.log("delete all");
-    // await axios.delete(`${REST}/books`);
+    console.log("#book: delete all");
+    await axios.delete(`${REST}/books`);
     ctx.commit("CLR_BOOKS");
   },
   async updateOne(ctx, book) {
-    console.log("update one");
-    // const response = await axios.put(`${REST}/book/${book.ID}`, book);
-    // ctx.commit("PUT_BOOK", response.data);
-    ctx.commit("PUT_BOOK", book);
-  },
+    console.log("#book: update one");
+    try {
+      const response = await axios.put(`${REST}/book/${book.ID}`, book);
+      ctx.commit("PUT_BOOK", response.data);
+      } catch {
+        ctx.commit("PUT_BOOK", book);
+      }  },
   async deleteOne(ctx, id) {
-    console.log("delete one");
-    // await axios.delete(`${REST}/book/${id}`);
+    console.log("#book: delete one");
+    await axios.delete(`${REST}/book/${id}`);
     ctx.commit("DEL_BOOK", id);
   }
 };

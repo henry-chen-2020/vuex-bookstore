@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <BookGrid msg="Welcome to Your Vue.js + TypeScript App" />
+    <BookGrid />
   </div>
 </template>
 

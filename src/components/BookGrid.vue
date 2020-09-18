@@ -11,6 +11,7 @@
       <i class="material-icons">texture</i>
     </div>
     <div class="bookList">
+      <div v-if="allBooks.length === 0">No book</div>
       <div class="book" v-for="book in allBooks" :key="book.ID">
         <div class="genre">{{ book.Genre }}</div>
         <h2>{{ book.Name }}</h2>
@@ -31,7 +32,7 @@ import { mapGetters, mapActions } from "vuex";
 import router from "../router";
 
 export default defineComponent({
-  name: "BookGriid",
+  name: "BookGrid",
   methods: {
     ...mapActions(["obtainAll", "deleteAll", "deleteOne"]),
     createNew() {
