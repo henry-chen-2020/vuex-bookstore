@@ -1,0 +1,23 @@
+[
+  {
+    "_id": { "$oid": "1" },
+    "Name": "Wow Factor",
+    "Author": "Ada",
+    "ISBN": "34572075",
+    "Genre": "fantasy"
+  },
+  {
+    "_id": { "$oid": "2" },
+    "Name": "New Yorker",
+    "Author": "famous",
+    "ISBN": "unkonwn",
+    "Genre": "fiction"
+  },
+  {
+    "_id": { "$oid": "3"},
+    "Name": "The Sky",
+    "Author": "Anonymous",
+    "ISBN": "123456789",
+    "Genre": "sci-fi"
+  }
+]

@@ -43,6 +43,9 @@ export default defineComponent({
   methods: {
     ...mapActions(["createNew", "updateOne"]),
     capitalize: str => str.charAt(0).toUpperCase() + str.slice(1),
+    setID(book, id) {
+      book._id = { $oid: id };
+    },
     submit() {
       console.log("#form: sumbit", this.act);
       const book = {};
@@ -51,7 +54,7 @@ export default defineComponent({
       if (this.act === "add") {
         this.createNew(book);
       } else {
-        book["ID"] = this.id;
+        this.setID(book, this.id);
         this.updateOne(book);
       }
       router.push("/");

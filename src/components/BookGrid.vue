@@ -12,14 +12,14 @@
     </div>
     <div class="bookList">
       <div v-if="allBooks.length === 0">No book</div>
-      <div class="book" v-for="book in allBooks" :key="book.ID">
+      <div class="book" v-for="book in allBooks" :key="book._id">
         <div class="genre">{{ book.Genre }}</div>
         <h2>{{ book.Name }}</h2>
-        <h5><i>by</i>{{ book.Author }}</h5>
+        <h5><i>by</i> {{ book.Author }}</h5>
         <div class="isbn">{{ book.ISBN }}</div>
         <div class="book-actions">
-          <i class="material-icons" @click="updateOne(book.ID)">edit</i>
-          <i class="material-icons" @click="deleteOne(book.ID)">close</i>
+          <i class="material-icons" @click="updateOne(book)">edit</i>
+          <i class="material-icons" @click="deleteOne(book)">close</i>
         </div>
       </div>
     </div>
@@ -35,11 +35,14 @@ export default defineComponent({
   name: "BookGrid",
   methods: {
     ...mapActions(["obtainAll", "deleteAll", "deleteOne"]),
+    getID(book) {
+      return book._id["$oid"];
+    },
     createNew() {
       router.push("/book/add/0");
     },
-    updateOne(ID: string) {
-      router.push(`/book/update/${ID}`);
+    updateOne(book) {
+      router.push(`/book/update/${this.getID(book)}`);
     }
   },
   computed: mapGetters(["allBooks"]),

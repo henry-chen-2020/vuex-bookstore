@@ -1,70 +1,21 @@
 import axios from "axios";
-const REST = "http://127.0.0.1:51364";
+const REST = `http://127.0.0.1:${process.env.VUE_APP_REST_API_PORT}`;
 import { v4 as uuid } from "uuid";
 
-const BOOKS = [
-  {
-    ID: "1",
-    Name: "Wow Factor",
-    Author: "Ada",
-    ISBN: "34572075",
-    Genre: "fantasy"
-  },
-  {
-    ID: "2",
-    Name: "New Yorker",
-    Author: "famous",
-    ISBN: "unkonwn",
-    Genre: "fiction"
-  },
-  {
-    ID: "3",
-    Name: "The Sky",
-    Author: "Anonymous",
-    ISBN: "123456789",
-    Genre: "sci-fi"
-  }
-];
+import BOOKS from "./books.json";
+
+const getID = book => book._id["$oid"];
+const setID = (book, id) => (book._id = { $oid: id });
+
 const state = {
-  books: [
-    {
-      ID: 1,
-      Name: "Wow Factor",
-      Author: "Ada",
-      ISBN: "34572075",
-      Genre: "fantasy"
-    },
-    {
-      ID: 2,
-      Name: "New Yorker",
-      Author: "famous",
-      ISBN: "unkonwn",
-      Genre: "fiction"
-    },
-    {
-      ID: 3,
-      Name: "The Sky",
-      Author: "Anonymous",
-      ISBN: "123456789",
-      Genre: "sci-fi"
-    }
-  ]
+  books: []
 };
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const getters = {
   allBooks: state => state.books,
-  theBook: state => id => state.books.find(book => book.ID === id)
+  theBook: state => id => state.books.find(book => getID(book) === id)
 };
-/**
- * createNew
- * obtainAll
- * deleteAll
- *
- * obtainOne
- * updateOne
- * deleteOne
- */
 
 const actions = {
   async obtainAll({ commit }) {
@@ -74,15 +25,15 @@ const actions = {
       commit("SET_BOOKS", response.data);
     } catch {
       commit("SET_BOOKS", BOOKS);
-  }
+    }
   },
   async createNew(ctx, book) {
-    book.ID = uuid();
     console.log("#book: create new", book);
     try {
       const response = await axios.post(`${REST}/books`, book);
       ctx.commit("ADD_BOOK", response.data);
     } catch (e) {
+      setID(book, uuid());
       ctx.commit("ADD_BOOK", book);
     }
   },
@@ -92,15 +43,17 @@ const actions = {
     ctx.commit("CLR_BOOKS");
   },
   async updateOne(ctx, book) {
-    console.log("#book: update one");
+    console.log("#book: update one", book);
     try {
-      const response = await axios.put(`${REST}/book/${book.ID}`, book);
+      const response = await axios.put(`${REST}/book/${getID(book)}`, book);
       ctx.commit("PUT_BOOK", response.data);
-      } catch {
-        ctx.commit("PUT_BOOK", book);
-      }  },
-  async deleteOne(ctx, id) {
-    console.log("#book: delete one");
+    } catch {
+      ctx.commit("PUT_BOOK", book);
+    }
+  },
+  async deleteOne(ctx, book) {
+    const id = getID(book);
+    console.log("#book: delete one", id);
     await axios.delete(`${REST}/book/${id}`);
     ctx.commit("DEL_BOOK", id);
   }
@@ -111,9 +64,9 @@ const mutations = {
   ADD_BOOK: (state, book) => state.books.unshift(book),
   CLR_BOOKS: () => (state.books = []),
   DEL_BOOK: (state, id) =>
-    (state.books = state.boook.filter(book => book.ID != id)),
+    (state.books = state.boook.filter(book => getID(book) != id)),
   PUT_BOOK: (state, book) => {
-    const index = state.books.findIndex(aBook => aBook.ID === book.ID);
+    const index = state.books.findIndex(aBook => getID(aBook) === getID(book));
     if (index !== -1) {
       state.books.splice(index, 1, book);
     }
