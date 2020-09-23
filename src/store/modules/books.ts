@@ -1,5 +1,5 @@
 import axios from "axios";
-const REST = `http://127.0.0.1:${process.env.VUE_APP_REST_API_PORT}`;
+const REST = `http://${process.env.VUE_APP_REST_API_URL}`;
 import { v4 as uuid } from "uuid";
 
 import BOOKS from "./books.json";
